@@ -31,14 +31,14 @@ jobs:
           name: chrome
           path: ./extension/chrome.zip
       - name: Upload Firefox build
-          uses: actions/upload-artifact@v2
-          if: success()
-          with:
-            name: firefox
-            path: ./extension/firefox.xpi
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: firefox
+          path: ./extension/firefox.xpi
       - name: Upload Opera build
-          uses: actions/upload-artifact@v2
-          if: success()
-          with:
-            name: opera
-            path: ./extension/opera.crx
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: opera
+          path: ./extension/opera.crx
