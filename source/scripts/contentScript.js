@@ -24,6 +24,9 @@ import browser from 'webextension-polyfill';
         });
         events.sort((a, b) => a.date - b.date);
       }
+      // Define date 1 hour in future, used to indicate very close deadlines
+      const now = new Date();
+      now.setHours(now.getHours() + 1);
       // Append future deadlines to page
       let items = [];
       for (let i = 0; i < events.length; i++) {
@@ -31,7 +34,7 @@ import browser from 'webextension-polyfill';
         if (event.date < today) continue;
         if (event.date.toDateString() === today.toDateString()) {
           // Due today
-          items.push(`<li><a href="${event.url}">
+          items.push(`<li><a href="${event.url}" style="color: ${now >= event.date ? 'red' : 'orange'}">
           ${event.summary}<br>
           <b>Today</b>, ${event.date.toLocaleString().substr(12, event.date.toLocaleString().length - 15) /* Exclude minutes from date */}
         </a></li>`);
