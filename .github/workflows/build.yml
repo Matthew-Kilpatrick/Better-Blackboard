@@ -24,9 +24,21 @@ jobs:
         run: yarn install
       - name: Build
         run: yarn run build
-      - name: Upload build
+      - name: Upload Chrome build
         uses: actions/upload-artifact@v2
         if: success()
         with:
-          name: extensions
-          path: ./extension
+          name: chrome
+          path: ./extension/chrome.zip
+      - name: Upload Firefox build
+          uses: actions/upload-artifact@v2
+          if: success()
+          with:
+            name: firefox
+            path: ./extension/firefox.xpi
+      - name: Upload Opera build
+          uses: actions/upload-artifact@v2
+          if: success()
+          with:
+            name: opera
+            path: ./extension/opera.crx
