@@ -5,25 +5,30 @@ import browser from 'webextension-polyfill';
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Start of the day
     // Load deadlines to where welcome image was originally
-    const url = await getCalendarUrl();
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
+    const eventsUrl = `https://online.manchester.ac.uk/webapps/calendar/calendarData/selectedCalendarEvents?start=${Math.round((new Date()).getTime() / 1000)}`;
+    xhr.open('GET', eventsUrl, true);
+    xhr.responseType = 'json';
     xhr.onload = () => {
-      // Scrape ical file for relevant details
+      // Parse JSON for events
       const events = [];
-      const lines = xhr.response.split('\n');
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line !== "BEGIN:VEVENT") continue;
-        const date = lines[i + 2].trim().substr(27);
+      for (let i = 0; i < xhr.response.length; i++) {
+        const event = xhr.response[i];
+        if (event.id.indexOf('GradableItem') === -1) {
+          // Not a deadline, so ignore calendar event
+          continue;
+        }
+        let courseName = event.calendarName.split(' ');
+        courseName = courseName.splice(0, courseName.length - 3).join(' ');
         events.push({
-          uid: lines[i + 5].trim().substr(4),
-          summary: lines[i + 4].trim().substr(8),
-          date: new Date(`${date.substr(0, 4)}-${date.substr(4, 2)}-${date.substr(6, 2)}T${date.substr(9, 2)}:${date.substr(11, 2)}:${date.substr(13, 2)}Z`),
-          url: `https://online.manchester.ac.uk/webapps/calendar/launch/attempt/${lines[i + 5].trim().substr(21).split('@')[0]}`
-        });
-        events.sort((a, b) => a.date - b.date);
+          uid: event.id,
+          title: event.title,
+          course: courseName,
+          date: new Date(event.startDate),
+          url: event.attemptable ? `https://online.manchester.ac.uk/webapps/calendar/launch/attempt/${event.id}` : null
+        })
       }
+      events.sort((a, b) => a.date - b.date);
       // Define date 1 hour in future, used to indicate very close deadlines
       const now = new Date();
       now.setHours(now.getHours() + 1);
@@ -31,6 +36,7 @@ import browser from 'webextension-polyfill';
       let items = [];
       for (let i = 0; i < events.length; i++) {
         const event = events[i];
+        const dayDiff = Math.round((event.date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         if (event.date < today) continue;
         if (event.date.toDateString() === today.toDateString()) {
           // Due today
@@ -41,10 +47,11 @@ import browser from 'webextension-polyfill';
         } else {
           // Not due today
           // TODO: support 'tomorrow'
-          items.push(`<li><a href="${event.url}">
-          ${event.summary}<br>
-          ${event.date.toLocaleString().substr(0, event.date.toLocaleString().length - 3) /* Exclude minutes from date */}
-        </a></li>`);
+          items.push(`<li>${event.url ? `<a href="${event.url}">`: ``}
+          <b>${event.course}</b><br>
+          ${event.title}<br>
+          ${event.date.toLocaleString().substr(0, event.date.toLocaleString().length - 3) /* Exclude minutes from date */} (${dayDiff} days)
+        ${event.url ? `</a>` : ``}</li>`);
         }
       }
       document.getElementById('$fixedId').innerHTML = `<h3>Upcoming Deadlines</h3><ul class="listElement">${items.join('')}</ul>`;
@@ -77,25 +84,3 @@ import browser from 'webextension-polyfill';
 })();
 // Add a better profile picture!
 document.getElementById('global-avatar').src = 'https://cdn.discordapp.com/attachments/783674315756666904/809813098155212810/809e8e529a280eb268abe815395ed2c1.png';
-
-/**
- * Get URL to iCalendar feed for logged in user
- * @returns {Promise<unknown>}
- */
-async function getCalendarUrl() {
-  // Fetch from browser extension storage if available
-  const url = await browser.storage.local.get('deadlines-ical-feed-url');
-  if (url.url !== undefined) {
-    return url.url;
-  }
-  // Fall back to requesting from Blackboard server
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://online.manchester.ac.uk/webapps/calendar/calendarFeed/url');
-  return new Promise(resolve => {
-    xhr.onload = () => {
-      browser.storage.local.set({'deadlines-ical-feed-url': xhr.response}); // Cache feed URL
-      resolve(xhr.response);
-    };
-    xhr.send();
-  });
-}
