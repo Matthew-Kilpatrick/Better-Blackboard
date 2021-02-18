@@ -67,7 +67,7 @@ import browser from 'webextension-polyfill';
         if (courses.length === 0) return;
         for (let i = 0; i < courses.length; i++) {
           if (courses[i].querySelector('a').innerText.substr(8, 1) === '1') {
-            courses[i].hidden = true;
+            document.getElementById('FormerCourses').querySelector('ul').appendChild(courses[i]);
           }
         }
         clearInterval(interval);

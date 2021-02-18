@@ -1,6 +1,5 @@
 # Ideas
 Below is a list of changes which could be made to the extension to improve it:
-- Rather than hiding previous semester courses, move them to the "past years' courses" tab
 - Display a course code alongside the deadline submission name (the iCal feed includes this, but ajax requests on calendar page do [eg. https://online.manchester.ac.uk/webapps/calendar/calendarData/selectedCalendarEvents?start=1612137600000&end=1615766400000&course_id=&mode=personal], so perhaps change deadline source?)
 - Detection & indication of whether a submission has been made for a deadline (again, not sure how easy)
 - Better deadline dates (eg. Tomorrow, this Thursday) where possible rather than (or in addition to) the date
