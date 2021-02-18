@@ -45,6 +45,9 @@
     ],
     "js": [
       "js/contentScript.bundle.js"
+    ],
+    "css":  [
+      "assets/css/contentScript.css"
     ]
   }]
 }

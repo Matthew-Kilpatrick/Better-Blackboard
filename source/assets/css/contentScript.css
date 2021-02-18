@@ -1,0 +1,4 @@
+/* Don't hide the upcoming deadlines panel on small screens */
+div#column0 > div.portlet:first-child {
+    display: block !important;
+}
