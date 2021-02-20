@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Better Blackboard",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "icons": {
     "16": "assets/icons/favicon-16.png",
     "32": "assets/icons/favicon-32.png",
@@ -14,8 +14,6 @@
   "short_name": "Better Blackboard",
 
   "permissions": [
-    "activeTab",
-    "storage",
     "http://online.manchester.ac.uk/*",
     "https://online.manchester.ac.uk/*"
   ],
