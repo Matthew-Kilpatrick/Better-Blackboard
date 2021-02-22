@@ -41,7 +41,8 @@ import browser from 'webextension-polyfill';
         if (event.date.toDateString() === today.toDateString()) {
           // Due today
           items.push(`<li><a href="${event.url}" style="color: ${now >= event.date ? 'red' : 'orange'}">
-          ${event.summary}<br>
+          <b>${event.course}</b><br>
+          ${event.title}<br>
           <b>Today</b>, ${event.date.toLocaleString().substr(12, event.date.toLocaleString().length - 15) /* Exclude minutes from date */}
         </a></li>`);
         } else {
