@@ -1,5 +1,6 @@
 # Better Blackboard
 [![Install Firefox add-on](.github/firefox-install.png)](https://addons.mozilla.org/en-GB/firefox/addon/better-blackboard/)
+[![Install Chrome extension](.github/chrome-install.png)](https://chrome.google.com/webstore/detail/better-blackboard/fkpohfnejjimkfbdfmlojhjmgjajckkk)
 
 This extension makes some minor modifications to the University of Manchester Blackboard homepage to make it more usable:
 - Replace the 'welcome' image with a list of upcoming deadlines, and submission links
