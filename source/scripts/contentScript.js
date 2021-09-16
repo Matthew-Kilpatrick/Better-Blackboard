@@ -66,7 +66,7 @@ import browser from 'webextension-polyfill';
     feb.setDate(1);
     feb.setHours(0, 0, 0, 0);
     const sep = new Date();
-    sep.setMonth(9);
+    sep.setMonth(8);
     sep.setDate(1);
     sep.setHours(0, 0, 0, 0);
     if (feb <= today <= sep) {
@@ -83,5 +83,3 @@ import browser from 'webextension-polyfill';
     }
   }
 })();
-// Add a better profile picture!
-document.getElementById('global-avatar').src = 'https://cdn.discordapp.com/attachments/783674315756666904/809813098155212810/809e8e529a280eb268abe815395ed2c1.png';
